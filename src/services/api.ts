@@ -7,8 +7,10 @@ export const searchBooks = async (bookName: string): Promise<Book[]> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({ bookName }),
+      mode: "cors",
     });
 
     if (!response.ok) {
