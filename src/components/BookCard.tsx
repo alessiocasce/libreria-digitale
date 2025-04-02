@@ -1,16 +1,38 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Book } from "@/types/book";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { downloadBook } from "@/services/api";
+import { toast } from "@/hooks/use-toast";
 
 interface BookCardProps {
   book: Book;
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  const downloadUrl = `https://1lib.sk${book.download}`;
+  const [isDownloading, setIsDownloading] = useState(false);
+  
+  const handleDownload = async () => {
+    try {
+      setIsDownloading(true);
+      await downloadBook(book.download);
+      toast({
+        title: "Download Started",
+        description: "Your book is being downloaded",
+      });
+    } catch (error) {
+      console.error("Download error:", error);
+      toast({
+        title: "Download Failed",
+        description: "There was an error downloading the book. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
   
   return (
     <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -52,10 +74,11 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         <Button
           variant="outline"
           className="mt-3 w-full"
-          onClick={() => window.open(downloadUrl, "_blank")}
+          onClick={handleDownload}
+          disabled={isDownloading}
         >
           <Download className="h-4 w-4 mr-2" />
-          Download
+          {isDownloading ? "Downloading..." : "Download"}
         </Button>
       </CardContent>
     </Card>

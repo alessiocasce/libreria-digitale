@@ -24,3 +24,51 @@ export const searchBooks = async (bookName: string): Promise<Book[]> => {
     throw error;
   }
 };
+
+export const downloadBook = async (downloadPath: string): Promise<void> => {
+  try {
+    const response = await fetch("http://localhost:3000/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ downloadPath }),
+      mode: "cors",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    // Get the filename from the Content-Disposition header if available
+    const contentDisposition = response.headers.get("Content-Disposition");
+    let filename = "book";
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch) {
+        filename = filenameMatch[1];
+      }
+    }
+
+    // Create a blob from the response
+    const blob = await response.blob();
+    
+    // Create a URL for the blob
+    const url = window.URL.createObjectURL(blob);
+    
+    // Create a temporary anchor element to trigger download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error("Download API Error:", error);
+    throw error;
+  }
+};
