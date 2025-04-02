@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import BookGrid from "@/components/BookGrid";
 import { searchBooks } from "@/services/api";
 import { Book } from "@/types/book";
-import { toast } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [books, setBooks] = useState<Book[]>([]);
