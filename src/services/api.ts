@@ -3,7 +3,7 @@ import { Book } from "@/types/book";
 
 export const searchBooks = async (bookName: string): Promise<Book[]> => {
   try {
-    const response = await fetch("http://localhost:3000/scrape", {
+    const response = await fetch("https://server-6ndv.onrender.com/scrape", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const searchBooks = async (bookName: string): Promise<Book[]> => {
 };
 export const downloadBook = async (downloadPath: string): Promise<void> => {
   try {
-    const response = await fetch("http://localhost:3000/download", {
+    const response = await fetch("https://server-6ndv.onrender.com/download", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
