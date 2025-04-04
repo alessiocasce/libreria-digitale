@@ -1,7 +1,8 @@
+
 import React, { useState } from "react";
 import { Book } from "@/types/book";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, BookIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { downloadBook } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
@@ -12,6 +13,7 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   const handleDownload = async () => {
     try {
@@ -32,7 +34,6 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           duration: 3000,  // Show this message longer
         });
       } 
-
       else if (error instanceof Error && error.message.includes("Wrong hash")) {
         toast({
           title: "Download Failed",
@@ -41,15 +42,12 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         });
       }
       else {
-
-
-
-      toast({
-        title: "Download Failed",
-        description: "There was an error downloading the book. Please try again.",
-        variant: "destructive",
-      });
-     }
+        toast({
+          title: "Download Failed",
+          description: "There was an error downloading the book. Please try again.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsDownloading(false);
     }
@@ -58,18 +56,16 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="relative pt-[140%] bg-slate-200">
-        {book.coverImage ? (
+        {book.coverImage && !imageError ? (
           <img
             src={book.coverImage}
             alt={`Cover of ${book.title}`}
             className="absolute inset-0 w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "https://via.placeholder.com/200x300?text=No+Cover";
-            }}
+            onError={() => setImageError(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-200">
-            <p className="text-slate-500 text-sm text-center p-4">No cover available</p>
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-100">
+            <BookIcon className="h-16 w-16 text-slate-400" />
           </div>
         )}
       </div>
