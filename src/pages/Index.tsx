@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import BookGrid from "@/components/BookGrid";
@@ -52,7 +53,7 @@ const Index = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-            BookVoyager
+            Libreria Digitale
           </h1>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">
             Discover and download your next favorite book from our vast library
