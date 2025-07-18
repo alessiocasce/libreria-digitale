@@ -3,7 +3,7 @@ import { Book } from "@/types/book";
 
 export const searchBooks = async (bookName: string): Promise<Book[]> => {
   try {
-    const response = await fetch("https://server-6ndv.onrender.com/scrape", {
+    const response = await fetch("https://server-tor.onrender.com/scrape", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
